@@ -197,7 +197,39 @@ export default function Book() {
               </li>
             </ul>
           </div>
-          <Pole className="pole-lg" />
+          <Pole className="pole-lg hero-pole" />
+          <aside className="hero-card" aria-label="ขั้นตอนการจอง">
+            <div className="hero-card-head">
+              <Pole className="pole-sm" />
+              <b>จองง่าย 3 ขั้น</b>
+            </div>
+            <ol className="hero-steps">
+              <li>
+                <span>1</span>
+                <div>
+                  <b>เลือกบริการและช่าง</b>
+                  เห็นราคาและเวลาที่ใช้ชัดเจน
+                </div>
+              </li>
+              <li>
+                <span>2</span>
+                <div>
+                  <b>เลือกวันและเวลาที่ว่าง</b>
+                  ระบบโชว์เฉพาะช่วงที่ช่างว่างจริง
+                </div>
+              </li>
+              <li>
+                <span>3</span>
+                <div>
+                  <b>รับบัตรคิวทันที</b>
+                  เช็กหรือยกเลิกเองได้ทุกเมื่อ
+                </div>
+              </li>
+            </ol>
+            <p className="hero-card-foot">
+              สอบถามทางโทรศัพท์ <a href={`tel:${SHOP.phone.replace(/-/g, '')}`}>{SHOP.phone}</a>
+            </p>
+          </aside>
         </div>
       </section>
 
