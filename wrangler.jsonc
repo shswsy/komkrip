@@ -13,7 +13,7 @@
     {
       "binding": "DB",
       "database_name": "komkrip",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "ddde0b8d-a419-40c6-bd43-0511f13dc4ce",
       "migrations_dir": "migrations"
     }
   ],
