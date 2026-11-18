@@ -1,10 +1,25 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { SHOP, STAFF, STATUS_LABEL, addDays, fmtMin, serviceById, shopNow, staffById, staffWorks, type Status } from '../../shared/shop'
 import { ApiError, api, send, type AdminBooking, type AdminDay } from '../api'
+import Icon, { type IconName } from '../components/Icon'
 import { baht, dayParts, prettyPhone, thaiLong, timeRange } from '../format'
+import { Link, Pole } from '../router'
+import Avatar from '../components/Avatar'
 
-const ROW = 44 // px per 30 minutes
+const ROW = 48 // px per 30 minutes
 const HOURS = Array.from({ length: (SHOP.close - SHOP.open) / 60 }, (_, i) => SHOP.open + i * 60)
+
+function Brand() {
+  return (
+    <Link to="/" className="brand">
+      <Pole className="pole-sm" />
+      <span>
+        <b>คมกริบ</b>
+        <small>BARBER · CHIANG MAI</small>
+      </span>
+    </Link>
+  )
+}
 
 function Login({ onDone }: { onDone: () => void }) {
   const [password, setPassword] = useState('')
@@ -24,10 +39,12 @@ function Login({ onDone }: { onDone: () => void }) {
     }
   }
   return (
-    <div className="wrap login">
+    <div className="login">
       <form className="login-card" onSubmit={submit}>
-        <p className="eyebrow">สำหรับเจ้าของร้าน</p>
-        <h1>หลังร้าน</h1>
+        <Brand />
+        <span className="tag">สำหรับเจ้าของร้าน</span>
+        <h1>เข้าสู่หลังร้าน</h1>
+        <p className="muted">ดูตารางคิวของช่างทุกคน อัปเดตสถานะ และปิดรับจองรายวัน</p>
         <label>
           <span>รหัสผ่าน</span>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" autoFocus required />
@@ -37,15 +54,22 @@ function Login({ onDone }: { onDone: () => void }) {
             {error}
           </p>
         )}
-        <button className="btn btn-primary btn-block" disabled={busy}>
-          {busy ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ'}
+        <button className="btn btn-primary btn-lg btn-block" disabled={busy}>
+          <Icon name="lock" /> {busy ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ'}
         </button>
         <p className="login-demo">
           ทดลองใช้: รหัสผ่าน <code>demo1234</code>
         </p>
+        <Link to="/" className="login-back">
+          <Icon name="back" size={16} /> กลับหน้าจองคิว
+        </Link>
       </form>
     </div>
   )
+}
+
+function Chip({ s }: { s: Status }) {
+  return <span className={`chip chip-${s}`}>{STATUS_LABEL[s]}</span>
 }
 
 function BookingDialog(props: {
@@ -73,18 +97,15 @@ function BookingDialog(props: {
       {b && (
         <div className="sheet-in">
           <header>
-            <span className={`pill pill-${b.status}`}>{STATUS_LABEL[b.status]}</span>
-            <span className="mono">#{b.code}</span>
+            <Chip s={b.status} />
+            <span className="code">#{b.code}</span>
             <button className="icon-btn" onClick={props.onClose} aria-label="ปิด">
-              ×
+              <Icon name="x" />
             </button>
           </header>
           <h2>{b.name}</h2>
+          <p className="sheet-time code">{timeRange(b.start_min, b.end_min)}</p>
           <dl className="sheet-rows">
-            <div>
-              <dt>เวลา</dt>
-              <dd className="mono">{timeRange(b.start_min, b.end_min)}</dd>
-            </div>
             <div>
               <dt>บริการ</dt>
               <dd>
@@ -130,7 +151,7 @@ function CloseDayForm({ date, onSave }: { date: string; onSave: (reason: string)
   const [reason, setReason] = useState('')
   if (!open)
     return (
-      <button className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>
+      <button className="btn btn-ghost btn-block" onClick={() => setOpen(true)}>
         ปิดรับจองวันนี้
       </button>
     )
@@ -145,11 +166,26 @@ function CloseDayForm({ date, onSave }: { date: string; onSave: (reason: string)
       }}
     >
       <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={`เหตุผล เช่น หยุดสงกรานต์ (${dayParts(date).day} ${dayParts(date).mon})`} maxLength={80} autoFocus />
-      <button className="btn btn-danger btn-sm">ปิดวันนี้</button>
-      <button type="button" className="btn btn-link btn-sm" onClick={() => setOpen(false)}>
-        ไม่ปิด
-      </button>
+      <div>
+        <button className="btn btn-danger btn-sm">ปิดวันนี้</button>
+        <button type="button" className="btn btn-link btn-sm" onClick={() => setOpen(false)}>
+          ไม่ปิด
+        </button>
+      </div>
     </form>
+  )
+}
+
+function Kpi({ icon, label, value, sub, tone = '' }: { icon: IconName; label: string; value: string | number; sub?: string; tone?: string }) {
+  return (
+    <div className={`kpi ${tone}`}>
+      <span className="kpi-ico">
+        <Icon name={icon} size={22} />
+      </span>
+      <span className="kpi-label">{label}</span>
+      <b className="kpi-value">{value}</b>
+      {sub && <span className="kpi-sub">{sub}</span>}
+    </div>
   )
 }
 
@@ -209,6 +245,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const open = bookings.find((b) => b.id === openId) ?? null
   const isToday = data?.now.date === date
   const nowMin = data?.now.min ?? 0
+  const isNow = (b: AdminBooking) => isToday && b.status === 'booked' && b.start_min <= nowMin && b.end_min > nowMin
 
   const stats = {
     total: placed.length,
@@ -256,164 +293,226 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   }
 
   const shopClosedWeekday = SHOP.closedWeekdays.includes(new Date(`${date}T00:00:00Z`).getUTCDay())
+  const working = STAFF.filter((s) => staffWorks(s, date))
 
   return (
-    <div className="admin wrap-wide">
-      <div className="admin-bar">
-        <div>
-          <p className="eyebrow">หลังร้าน · ตารางคิว</p>
-          <h1>{thaiLong(date)}</h1>
-        </div>
-        <div className="admin-tools">
-          <div className="seg">
-            <button onClick={() => setDate(addDays(date, -1))} aria-label="วันก่อนหน้า">
-              ‹
-            </button>
-            <button onClick={() => setDate(shopNow().date)} disabled={isToday}>
-              วันนี้
-            </button>
-            <button onClick={() => setDate(addDays(date, 1))} aria-label="วันถัดไป">
-              ›
+    <div className="adm">
+      <aside className="adm-side">
+        <Brand />
+        <nav className="adm-nav" aria-label="เมนูหลังร้าน">
+          <span className="adm-nav-h">หลังร้าน</span>
+          <a href="/admin" aria-current="page">
+            <Icon name="grid" /> ตารางคิว
+          </a>
+          <span className="adm-nav-h">หน้าร้าน</span>
+          <Link to="/">
+            <Icon name="store" /> หน้าจองคิว
+          </Link>
+          <Link to="/my">
+            <Icon name="search" /> เช็กคิวลูกค้า
+          </Link>
+        </nav>
+        <div className="adm-side-foot">
+          <div className="adm-side-card">
+            <b>ข้อมูลตัวอย่าง</b>
+            <span>ล้างและใส่คิวใหม่ทุกคืน 03:00</span>
+            <button className="btn btn-sm btn-accent" onClick={resetDemo}>
+              <Icon name="refresh" size={16} /> รีเซ็ตตอนนี้
             </button>
           </div>
-          <input type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} aria-label="เลือกวันที่" />
-          <button className="btn btn-link btn-sm" onClick={logout}>
-            ออกจากระบบ
+          <button className="adm-logout" onClick={logout}>
+            <Icon name="logout" /> ออกจากระบบ
           </button>
         </div>
-      </div>
+      </aside>
 
-      <div className="week" role="tablist" aria-label="สัปดาห์นี้">
-        {(data?.week ?? []).map((w) => {
-          const p = dayParts(w.date)
-          return (
-            <button key={w.date} role="tab" aria-selected={w.date === date} className={`week-day ${w.closed ? 'is-closed' : ''}`} onClick={() => setDate(w.date)}>
-              <span>{p.wd}</span>
-              <b>{p.day}</b>
-              <small>{w.closed ? 'ปิด' : `${w.count} คิว`}</small>
-            </button>
-          )
-        })}
-      </div>
-
-      <div className="stats">
-        <div>
-          <span>คิวทั้งหมด</span>
-          <b>{stats.total}</b>
-        </div>
-        <div>
-          <span>รอให้บริการ</span>
-          <b>{stats.waiting}</b>
-        </div>
-        <div>
-          <span>เสร็จแล้ว / ไม่มา</span>
-          <b>
-            {stats.done} <small>/ {stats.noShow}</small>
-          </b>
-        </div>
-        <div>
-          <span>รายได้ (คาดการณ์)</span>
-          <b>
-            {baht(stats.revenue)} <small>/ {baht(stats.expected)}</small>
-          </b>
-        </div>
-        {next && (
-          <div className="stats-next">
-            <span>คิวถัดไป</span>
-            <button className="link-btn" onClick={() => setOpenId(next.id)}>
-              {fmtMin(next.start_min)} {next.name} · {staffById(next.staff_id)?.name}
-            </button>
+      <div className="adm-main">
+        <header className="adm-top">
+          <div>
+            <p className="adm-crumb">หลังร้าน / ตารางคิว</p>
+            <h1>
+              {isToday ? 'คิววันนี้' : 'ตารางคิว'} <span>{thaiLong(date)}</span>
+            </h1>
           </div>
-        )}
-      </div>
+          <div className="adm-tools">
+            <div className="seg">
+              <button onClick={() => setDate(addDays(date, -1))} aria-label="วันก่อนหน้า">
+                <Icon name="back" size={18} />
+              </button>
+              <button onClick={() => setDate(shopNow().date)} disabled={isToday}>
+                วันนี้
+              </button>
+              <button onClick={() => setDate(addDays(date, 1))} aria-label="วันถัดไป">
+                <Icon name="arrow" size={18} />
+              </button>
+            </div>
+            <input type="date" value={date} onChange={(e) => e.target.value && setDate(e.target.value)} aria-label="เลือกวันที่" />
+          </div>
+        </header>
 
-      <div className="admin-row">
-        {data?.date === date && data.closed ? (
-          <p className="closed-banner">
-            ปิดรับจองวันนี้{data.reason ? ` — ${data.reason}` : ''}
-            <button className="btn btn-ghost btn-sm" onClick={reopenDay}>
-              เปิดรับจอง
-            </button>
+        <div className="week" role="tablist" aria-label="สัปดาห์นี้">
+          {(data?.week ?? []).map((w) => {
+            const p = dayParts(w.date)
+            return (
+              <button key={w.date} role="tab" aria-selected={w.date === date} className={`week-day ${w.closed ? 'is-closed' : ''}`} onClick={() => setDate(w.date)}>
+                <span>{p.wd}</span>
+                <b>{p.day}</b>
+                <small>{w.closed ? 'ปิด' : `${w.count} คิว`}</small>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="kpis">
+          <Kpi icon="ticket" label="คิวทั้งหมด" value={stats.total} sub={`ช่างเข้างาน ${working.length}/${STAFF.length} คน`} tone="kpi-dark" />
+          <Kpi icon="hourglass" label="รอให้บริการ" value={stats.waiting} sub={isToday && next ? `ถัดไป ${fmtMin(next.start_min)}` : 'ยังไม่ถึงเวลา'} tone="kpi-accent" />
+          <Kpi icon="check" label="เสร็จแล้ว / ไม่มา" value={`${stats.done} / ${stats.noShow}`} sub="อัปเดตจากการกดสถานะ" />
+          <Kpi icon="money" label="รายได้จริง" value={baht(stats.revenue)} sub={`คาดการณ์ทั้งวัน ${baht(stats.expected)}`} />
+        </div>
+
+        {error && (
+          <p className="alert" role="alert">
+            {error}
           </p>
-        ) : shopClosedWeekday ? (
-          <p className="closed-banner">วันพุธ ร้านหยุดประจำสัปดาห์</p>
-        ) : (
-          <CloseDayForm key={date} date={date} onSave={closeDay} />
         )}
-        <span className="legend">
-          <i className="lg-booked" /> จองแล้ว <i className="lg-done" /> เสร็จ <i className="lg-no_show" /> ไม่มา
-        </span>
-        <button className="btn btn-link btn-sm" onClick={resetDemo}>
-          รีเซ็ตข้อมูลตัวอย่าง
-        </button>
-      </div>
 
-      {error && (
-        <p className="alert" role="alert">
-          {error}
-        </p>
-      )}
-
-      <div className="board" style={{ '--row': `${ROW}px`, '--cols': STAFF.length } as CSSProperties}>
-        <div className="board-head">
-          <span />
-          {STAFF.map((s) => (
-            <span key={s.id} className="board-staff">
-              <i style={{ '--h': s.hue } as CSSProperties} />
-              {s.name}
-              {!staffWorks(s, date) && <small>หยุด</small>}
-            </span>
-          ))}
-        </div>
-        <div className="board-body" style={{ height: ((SHOP.close - SHOP.open) / 30) * ROW }}>
-          <div className="board-times" aria-hidden="true">
-            {HOURS.map((h) => (
-              <span key={h} style={{ top: ((h - SHOP.open) / 30) * ROW }}>
-                {fmtMin(h)}
+        <div className="adm-grid">
+          <section className="card board-card" aria-label="ตารางช่าง">
+            <header className="card-head">
+              <h2>ตารางช่าง</h2>
+              <span className="legend">
+                <i className="lg-booked" /> จองแล้ว <i className="lg-done" /> เสร็จ <i className="lg-no_show" /> ไม่มา
               </span>
-            ))}
-          </div>
-          {STAFF.map((s) => (
-            <div key={s.id} className={`board-col ${staffWorks(s, date) ? '' : 'is-off'}`}>
-              {placed
-                .filter((b) => b.staff_id === s.id)
-                .map((b) => (
-                  <button
-                    key={b.id}
-                    className={`appt appt-${b.status} ${isToday && b.status === 'booked' && b.start_min <= nowMin && b.end_min > nowMin ? 'is-now' : ''}`}
-                    style={{ top: ((b.start_min - SHOP.open) / 30) * ROW + 2, height: ((b.end_min - b.start_min) / 30) * ROW - 4 }}
-                    onClick={() => setOpenId(b.id)}
-                  >
-                    <b>
-                      {fmtMin(b.start_min)} {b.name}
-                    </b>
-                    <span>{serviceById(b.service_id)?.name}</span>
-                  </button>
+            </header>
+            <div className="board" style={{ '--row': `${ROW}px`, '--cols': STAFF.length } as CSSProperties}>
+              <div className="board-head">
+                <span />
+                {STAFF.map((s) => (
+                  <span key={s.id} className="board-staff">
+                    <Avatar id={s.id} size="sm" />
+                    <span>
+                      {s.name}
+                      <small>{staffWorks(s, date) ? `${placed.filter((b) => b.staff_id === s.id).length} คิว` : 'หยุด'}</small>
+                    </span>
+                  </span>
                 ))}
+              </div>
+              <div className="board-body" style={{ height: ((SHOP.close - SHOP.open) / 30) * ROW }}>
+                <div className="board-times" aria-hidden="true">
+                  {HOURS.map((h) => (
+                    <span key={h} style={{ top: ((h - SHOP.open) / 30) * ROW }}>
+                      {fmtMin(h)}
+                    </span>
+                  ))}
+                </div>
+                {STAFF.map((s) => (
+                  <div key={s.id} className={`board-col ${staffWorks(s, date) ? '' : 'is-off'}`}>
+                    {placed
+                      .filter((b) => b.staff_id === s.id)
+                      .map((b) => (
+                        <button
+                          key={b.id}
+                          className={`appt appt-${b.status} ${b.end_min - b.start_min <= 30 ? 'appt-short' : ''} ${isNow(b) ? 'is-now' : ''}`}
+                          style={{ top: ((b.start_min - SHOP.open) / 30) * ROW + 2, height: ((b.end_min - b.start_min) / 30) * ROW - 4 }}
+                          onClick={() => setOpenId(b.id)}
+                        >
+                          <b>
+                            <span className="code">{fmtMin(b.start_min)}</span> {b.name}
+                          </b>
+                          <span>{serviceById(b.service_id)?.name}</span>
+                        </button>
+                      ))}
+                  </div>
+                ))}
+                {isToday && nowMin > SHOP.open && nowMin < SHOP.close && (
+                  <div className="now-line" style={{ top: ((nowMin - SHOP.open) / 30) * ROW }}>
+                    <span>{fmtMin(nowMin)}</span>
+                  </div>
+                )}
+              </div>
             </div>
-          ))}
-          {isToday && nowMin > SHOP.open && nowMin < SHOP.close && (
-            <div className="now-line" style={{ top: ((nowMin - SHOP.open) / 30) * ROW }}>
-              <span>{fmtMin(nowMin)}</span>
-            </div>
-          )}
+          </section>
+
+          <div className="adm-rail">
+            {next && (
+              <button className="next-card" onClick={() => setOpenId(next.id)}>
+                <span className="next-label">{isNow(next) ? 'กำลังให้บริการ' : 'คิวถัดไป'}</span>
+                <span className="next-time code">{fmtMin(next.start_min)}</span>
+                <b>{next.name}</b>
+                <span>
+                  {serviceById(next.service_id)?.name} · {staffById(next.staff_id)?.name}
+                </span>
+                <span className="next-go">
+                  ดูรายละเอียด <Icon name="arrow" size={16} />
+                </span>
+              </button>
+            )}
+
+            <section className="card agenda" aria-label="รายการคิว">
+              <header className="card-head">
+                <h2>รายการคิว</h2>
+                <span className="muted small">{placed.length} คิว</span>
+              </header>
+              {placed.length === 0 ? (
+                <p className="empty">{shopClosedWeekday || data?.closed ? 'ร้านปิดวันนี้' : 'ยังไม่มีคิวในวันนี้'}</p>
+              ) : (
+                <ul>
+                  {placed.map((b) => (
+                    <li key={b.id}>
+                      <button className={`agenda-row ${isNow(b) ? 'is-now' : ''}`} onClick={() => setOpenId(b.id)}>
+                        <span className="agenda-time code">{fmtMin(b.start_min)}</span>
+                        <span className="agenda-who">
+                          <b>{b.name}</b>
+                          <small>
+                            {serviceById(b.service_id)?.name} · {staffById(b.staff_id)?.name}
+                          </small>
+                        </span>
+                        <Chip s={b.status} />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {cancelled.length > 0 && (
+                <details className="cancelled">
+                  <summary>ยกเลิกแล้ว {cancelled.length} คิว</summary>
+                  <ul>
+                    {cancelled.map((b) => (
+                      <li key={b.id}>
+                        <button className="link-btn" onClick={() => setOpenId(b.id)}>
+                          {fmtMin(b.start_min)} · {b.name} · {serviceById(b.service_id)?.name} · {staffById(b.staff_id)?.name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </section>
+
+            <section className="card day-card" aria-label="การรับจองวันนี้">
+              <header className="card-head">
+                <h2>การรับจอง</h2>
+                {data?.date === date && (data.closed || shopClosedWeekday ? <span className="chip chip-cancelled">ปิด</span> : <span className="chip chip-done">เปิดรับ</span>)}
+              </header>
+              {data?.date === date && data.closed ? (
+                <div className="closed-banner">
+                  <p>ปิดรับจองวันนี้{data.reason ? ` — ${data.reason}` : ''}</p>
+                  <button className="btn btn-ghost btn-sm" onClick={reopenDay}>
+                    เปิดรับจอง
+                  </button>
+                </div>
+              ) : shopClosedWeekday ? (
+                <p className="muted">วันพุธ ร้านหยุดประจำสัปดาห์</p>
+              ) : (
+                <>
+                  <p className="muted small">ปิดวันพิเศษ เช่น หยุดสงกรานต์ ลูกค้าจะจองวันนั้นไม่ได้ทันที</p>
+                  <CloseDayForm key={date} date={date} onSave={closeDay} />
+                </>
+              )}
+            </section>
+          </div>
         </div>
       </div>
-
-      {cancelled.length > 0 && (
-        <details className="cancelled">
-          <summary>ยกเลิกแล้ว {cancelled.length} คิว</summary>
-          <ul>
-            {cancelled.map((b) => (
-              <li key={b.id}>
-                <button className="link-btn" onClick={() => setOpenId(b.id)}>
-                  {fmtMin(b.start_min)} · {b.name} · {serviceById(b.service_id)?.name} · {staffById(b.staff_id)?.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </details>
-      )}
 
       <BookingDialog b={open} onClose={() => setOpenId(null)} onStatus={setStatus} />
       {toast && (

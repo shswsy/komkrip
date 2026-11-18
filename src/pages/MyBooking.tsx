@@ -61,9 +61,9 @@ export default function MyBooking() {
   return (
     <div className="wrap my">
       <div className="my-copy">
-        <p className="eyebrow">คิวของฉัน</p>
+        <span className="tag">คิวของฉัน</span>
         <h1>เช็กหรือยกเลิกคิว</h1>
-        <p>ใช้รหัสคิว 6 ตัวบนบัตรคิว กับเบอร์มือถือที่ใช้จอง ถ้าเปลี่ยนเวลา ให้ยกเลิกแล้วจองใหม่ได้เลย</p>
+        <p className="my-lead">ใช้รหัสคิว 6 ตัวบนบัตรคิว กับเบอร์มือถือที่ใช้จอง ถ้าเปลี่ยนเวลา ให้ยกเลิกแล้วจองใหม่ได้เลย</p>
         <form className="lookup" onSubmit={lookup}>
           <label>
             <span>รหัสคิว</span>
@@ -73,7 +73,7 @@ export default function MyBooking() {
               maxLength={8}
               autoCapitalize="characters"
               placeholder="เช่น K7F2QX"
-              className="mono"
+              className="code"
               required
             />
           </label>
@@ -87,7 +87,7 @@ export default function MyBooking() {
               required
             />
           </label>
-          <button className="btn btn-primary" disabled={busy}>
+          <button className="btn btn-primary btn-lg" disabled={busy}>
             {busy && !ticket ? 'กำลังค้นหา…' : 'ค้นหาคิว'}
           </button>
         </form>
@@ -119,6 +119,7 @@ export default function MyBooking() {
         ) : (
           <div className="ticket-ghost" aria-hidden="true">
             <span>บัตรคิวจะแสดงที่นี่</span>
+            <small>กรอกรหัสคิวและเบอร์มือถือ แล้วกด “ค้นหาคิว”</small>
           </div>
         )}
       </div>
