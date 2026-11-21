@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { SHOP, shopNow } from '../../shared/shop'
 import { ApiError, send, toTicket, type RawBooking, type TicketData } from '../api'
 import { Link } from '../router'
@@ -21,20 +21,38 @@ export default function MyBooking() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [confirming, setConfirming] = useState(false)
+  // true while the booking saved on this device is being fetched on arrival
+  const [auto, setAuto] = useState(() => !!(code && phone))
+  const started = useRef(false)
 
-  async function lookup(e: FormEvent) {
-    e.preventDefault()
+  async function find(c: string, p: string, quiet = false) {
     setBusy(true)
     setError('')
     setConfirming(false)
     try {
-      setTicket(toTicket(await send<RawBooking>('/bookings/lookup', 'POST', { code, phone })))
+      setTicket(toTicket(await send<RawBooking>('/bookings/lookup', 'POST', { code: c, phone: p })))
     } catch (err) {
       setTicket(null)
-      setError((err as ApiError).message)
+      // a stale saved booking (demo reset, another device) just leaves the form filled in, no red alert
+      if (!quiet) setError((err as ApiError).message)
     } finally {
       setBusy(false)
+      setAuto(false)
     }
+  }
+
+  // arriving from the booking confirmation, or coming back later: open the latest ticket straight away
+  useEffect(() => {
+    if (started.current || !auto) return
+    started.current = true
+    void find(code, phone, true)
+    // run once on mount with the saved booking
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function lookup(e: FormEvent) {
+    e.preventDefault()
+    void find(code, phone)
   }
 
   async function cancel() {
@@ -117,9 +135,18 @@ export default function MyBooking() {
             )}
           </>
         ) : (
-          <div className="ticket-ghost" aria-hidden="true">
-            <span>บัตรคิวจะแสดงที่นี่</span>
-            <small>กรอกรหัสคิวและเบอร์มือถือ แล้วกด “ค้นหาคิว”</small>
+          <div className={`ticket-ghost ${auto ? 'is-loading' : ''}`} aria-hidden={!auto} role={auto ? 'status' : undefined}>
+            {auto ? (
+              <>
+                <span>กำลังเปิดคิวล่าสุดของคุณ…</span>
+                <small>รหัส {code}</small>
+              </>
+            ) : (
+              <>
+                <span>บัตรคิวจะแสดงที่นี่</span>
+                <small>กรอกรหัสคิวและเบอร์มือถือ แล้วกด “ค้นหาคิว”</small>
+              </>
+            )}
           </div>
         )}
       </div>
