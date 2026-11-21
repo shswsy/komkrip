@@ -93,7 +93,7 @@ function BookingDialog(props: {
     { s: 'booked', label: 'คืนสถานะเป็น “จองแล้ว”', cls: 'btn-link' },
   ]
   return (
-    <dialog ref={ref} className="sheet" onClose={props.onClose} onClick={(e) => e.target === ref.current && props.onClose()}>
+    <dialog ref={ref} className="sheet" aria-labelledby="sheet-name" onClose={props.onClose} onClick={(e) => e.target === ref.current && props.onClose()}>
       {b && (
         <div className="sheet-in">
           <header>
@@ -103,7 +103,7 @@ function BookingDialog(props: {
               <Icon name="x" />
             </button>
           </header>
-          <h2>{b.name}</h2>
+          <h2 id="sheet-name">{b.name}</h2>
           <p className="sheet-time code">{timeRange(b.start_min, b.end_min)}</p>
           <dl className="sheet-rows">
             <div>
@@ -165,7 +165,7 @@ function CloseDayForm({ date, onSave }: { date: string; onSave: (reason: string)
         setReason('')
       }}
     >
-      <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder={`เหตุผล เช่น หยุดสงกรานต์ (${dayParts(date).day} ${dayParts(date).mon})`} maxLength={80} autoFocus />
+      <input aria-label="เหตุผลที่ปิดรับจอง" value={reason} onChange={(e) => setReason(e.target.value)} placeholder={`เหตุผล เช่น หยุดสงกรานต์ (${dayParts(date).day} ${dayParts(date).mon})`} maxLength={80} autoFocus />
       <div>
         <button className="btn btn-danger btn-sm">ปิดวันนี้</button>
         <button type="button" className="btn btn-link btn-sm" onClick={() => setOpen(false)}>
@@ -196,6 +196,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [openId, setOpenId] = useState<number | null>(null)
   const [toast, setToast] = useState('')
   const [tick, setTick] = useState(0)
+  const [confirmReset, setConfirmReset] = useState(false)
 
   const load = useCallback(
     async (d: string) => {
@@ -281,6 +282,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   }
 
   async function resetDemo() {
+    if (!confirmReset) {
+      setConfirmReset(true)
+      return
+    }
+    setConfirmReset(false)
     const r = await send<{ seeded: number }>('/admin/reset-demo', 'POST')
     setToast(`ล้างข้อมูลและใส่คิวตัวอย่าง ${r.seeded} คิว`)
     setDate(shopNow().date)
@@ -316,9 +322,14 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           <div className="adm-side-card">
             <b>ข้อมูลตัวอย่าง</b>
             <span>ล้างและใส่คิวใหม่ทุกคืน 03:00</span>
-            <button className="btn btn-sm btn-accent" onClick={resetDemo}>
-              <Icon name="refresh" size={16} /> รีเซ็ตตอนนี้
+            <button className={`btn btn-sm ${confirmReset ? 'btn-danger' : 'btn-accent'}`} onClick={resetDemo}>
+              <Icon name="refresh" size={16} /> {confirmReset ? 'กดอีกครั้งเพื่อล้างทั้งหมด' : 'รีเซ็ตตอนนี้'}
             </button>
+            {confirmReset && (
+              <button className="btn-link adm-cancel" onClick={() => setConfirmReset(false)}>
+                ไม่ล้าง
+              </button>
+            )}
           </div>
           <button className="adm-logout" onClick={logout}>
             <Icon name="logout" /> ออกจากระบบ
@@ -350,11 +361,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           </div>
         </header>
 
-        <div className="week" role="tablist" aria-label="สัปดาห์นี้">
+        <div className="week" role="group" aria-label="สัปดาห์นี้">
           {(data?.week ?? []).map((w) => {
             const p = dayParts(w.date)
             return (
-              <button key={w.date} role="tab" aria-selected={w.date === date} className={`week-day ${w.closed ? 'is-closed' : ''}`} onClick={() => setDate(w.date)}>
+              <button key={w.date} aria-pressed={w.date === date} className={`week-day ${w.closed ? 'is-closed' : ''}`} onClick={() => setDate(w.date)}>
                 <span>{p.wd}</span>
                 <b>{p.day}</b>
                 <small>{w.closed ? 'ปิด' : `${w.count} คิว`}</small>

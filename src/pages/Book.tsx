@@ -87,6 +87,14 @@ export default function Book() {
   const [done, setDone] = useState<TicketData | null>(null)
   const flowRef = useRef<HTMLDivElement>(null)
   const shownStep = useRef('0')
+  const doneH1 = useRef<HTMLHeadingElement>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
+  const phoneRef = useRef<HTMLInputElement>(null)
+
+  // after booking, move focus to the confirmation heading (the submit button just unmounted)
+  useEffect(() => {
+    if (done) doneH1.current?.focus({ preventScroll: true })
+  }, [done])
 
   const service = serviceId ? serviceById(serviceId) : undefined
 
@@ -130,7 +138,8 @@ export default function Book() {
     const el = flowRef.current
     if (!el) return
     const top = el.getBoundingClientRect().top
-    if (top < 60 || top > window.innerHeight * 0.4) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (top < 60 || top > window.innerHeight * 0.4) el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' })
     document.getElementById('panel-h')?.focus({ preventScroll: true })
   }, [step, done])
 
@@ -150,6 +159,7 @@ export default function Book() {
   function next() {
     if (step === 3 && !(nameOk && phoneOk)) {
       setTouched(true)
+      ;(nameOk ? phoneRef : nameRef).current?.focus()
       return
     }
     if (!canLeave[step]) return
@@ -208,7 +218,9 @@ export default function Book() {
             <Icon name="check" size={40} />
           </span>
           <span className="tag">จองสำเร็จ</span>
-          <h1>แล้วเจอกันที่ร้านครับ</h1>
+          <h1 tabIndex={-1} ref={doneH1}>
+            แล้วเจอกันที่ร้านครับ
+          </h1>
           <p className="done-when">
             <b>{thaiLong(done.date)}</b>
             <br />
@@ -370,16 +382,15 @@ export default function Book() {
           {step === 2 && service && (
             <Panel step={2} aside={`${service.name} ใช้เวลา ${service.duration} นาที · ${staffLabel}`}>
               <h3 className="sub-h">วันที่</h3>
-              <div className="days" role="listbox" aria-label="เลือกวัน">
+              <div className="days" role="group" aria-label="เลือกวัน">
                 {(days ?? []).map((d, i) => {
                   const p = dayParts(d.date)
                   return (
                     <button
                       type="button"
-                      role="option"
                       key={d.date}
                       className={`day ${d.closed ? 'is-closed' : ''}`}
-                      aria-selected={date === d.date}
+                      aria-pressed={date === d.date}
                       disabled={d.free === 0}
                       onClick={() => {
                         setDate(d.date)
@@ -448,9 +459,15 @@ export default function Book() {
                     autoComplete="given-name"
                     placeholder="เช่น คุณเอ"
                     aria-invalid={touched && !nameOk}
+                    aria-describedby={touched && !nameOk ? 'err-name' : undefined}
+                    ref={nameRef}
                     required
                   />
-                  {touched && !nameOk && <em className="field-err">กรอกชื่ออย่างน้อย 2 ตัวอักษร</em>}
+                  {touched && !nameOk && (
+                    <em className="field-err" id="err-name">
+                      กรอกชื่ออย่างน้อย 2 ตัวอักษร
+                    </em>
+                  )}
                 </label>
                 <label>
                   <span>เบอร์มือถือ</span>
@@ -461,9 +478,15 @@ export default function Book() {
                     autoComplete="tel"
                     placeholder="08x-xxx-xxxx"
                     aria-invalid={(touched || phone.length >= 10) && !phoneOk}
+                    aria-describedby={(touched || phone.length >= 10) && !phoneOk ? 'err-phone' : undefined}
+                    ref={phoneRef}
                     required
                   />
-                  {(touched || phone.length >= 10) && !phoneOk && <em className="field-err">เบอร์มือถือ 10 หลัก ขึ้นต้น 06 / 08 / 09</em>}
+                  {(touched || phone.length >= 10) && !phoneOk && (
+                    <em className="field-err" id="err-phone">
+                      เบอร์มือถือ 10 หลัก ขึ้นต้น 06 / 08 / 09
+                    </em>
+                  )}
                 </label>
                 <label className="wide">
                   <span>
