@@ -82,9 +82,12 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* two-tone focus: amber hugs the control, ink ring outside it. Amber alone was ~1.7:1 on paper;
+   the ink ring carries contrast on light surfaces, the amber on dark (ink) ones. */
 :focus-visible {
-  outline: 3px solid var(--accent);
-  outline-offset: 2px;
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--accent);
 }
 
 .code {
@@ -1013,7 +1016,7 @@ input::placeholder {
 
 input:focus {
   outline: none;
-  box-shadow: 0 0 0 4px var(--accent);
+  box-shadow: 0 0 0 3px var(--accent), 0 0 0 5px var(--ink);
 }
 
 input[aria-invalid='true'] {
