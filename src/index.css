@@ -1275,8 +1275,9 @@ input[aria-invalid='true'] {
 }
 
 /* headings that receive focus programmatically (route change, booking done) */
-main h1:focus {
+:root main h1:focus {
   outline: none;
+  box-shadow: none;
 }
 
 .sr-only {

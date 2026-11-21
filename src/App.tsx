@@ -18,12 +18,11 @@ export default function App() {
   }, [path, admin])
 
   // client-side route change: move focus to the new page's heading so screen readers hear the new page
-  const first = useRef(true)
+  // compare with the previous path (not a "first run" flag: StrictMode runs effects twice in dev)
+  const prevPath = useRef(path)
   useEffect(() => {
-    if (first.current) {
-      first.current = false
-      return
-    }
+    if (prevPath.current === path) return
+    prevPath.current = path
     const h = document.querySelector<HTMLElement>('main h1')
     if (!h) return
     h.tabIndex = -1
