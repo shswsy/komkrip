@@ -1,0 +1,410 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-20T00:00:00Z",
+  "title": "Design System: คมกริบ บาร์เบอร์ · Komkrip Barber",
+  "extensions": {
+    "colorMeta": {
+      "pole-amber": {
+        "role": "primary",
+        "displayName": "Pole Amber",
+        "canonical": "#ffb22e",
+        "tonalRamp": [
+          "oklch(15% 0.088 75)",
+          "oklch(26% 0.125 75)",
+          "oklch(38% 0.160 75)",
+          "oklch(49% 0.160 75)",
+          "oklch(61% 0.160 75)",
+          "oklch(72% 0.160 75)",
+          "oklch(84% 0.125 75)",
+          "oklch(95% 0.088 75)"
+        ]
+      },
+      "pole-amber-pale": {
+        "role": "primary",
+        "displayName": "Pole Amber Pale",
+        "canonical": "#ffe2a6",
+        "tonalRamp": [
+          "oklch(15% 0.046 85)",
+          "oklch(26% 0.064 85)",
+          "oklch(38% 0.083 85)",
+          "oklch(49% 0.083 85)",
+          "oklch(61% 0.083 85)",
+          "oklch(72% 0.083 85)",
+          "oklch(84% 0.064 85)",
+          "oklch(95% 0.046 85)"
+        ]
+      },
+      "clipper-black": {
+        "role": "neutral",
+        "displayName": "Clipper Black",
+        "canonical": "#111111",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(38% 0.000 90)",
+          "oklch(49% 0.000 90)",
+          "oklch(61% 0.000 90)",
+          "oklch(72% 0.000 90)",
+          "oklch(84% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "clipper-charcoal": {
+        "role": "neutral",
+        "displayName": "Clipper Charcoal",
+        "canonical": "#2a2a2a",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(38% 0.000 90)",
+          "oklch(49% 0.000 90)",
+          "oklch(61% 0.000 90)",
+          "oklch(72% 0.000 90)",
+          "oklch(84% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "towel-cream": {
+        "role": "neutral",
+        "displayName": "Towel Cream",
+        "canonical": "#f4f1ea",
+        "tonalRamp": [
+          "oklch(15% 0.005 87)",
+          "oklch(26% 0.008 87)",
+          "oklch(38% 0.010 87)",
+          "oklch(49% 0.010 87)",
+          "oklch(61% 0.010 87)",
+          "oklch(72% 0.010 87)",
+          "oklch(84% 0.008 87)",
+          "oklch(95% 0.005 87)"
+        ]
+      },
+      "towel-cream-deep": {
+        "role": "neutral",
+        "displayName": "Towel Cream Deep",
+        "canonical": "#e9e4d8",
+        "tonalRamp": [
+          "oklch(15% 0.009 88)",
+          "oklch(26% 0.013 88)",
+          "oklch(38% 0.017 88)",
+          "oklch(49% 0.017 88)",
+          "oklch(61% 0.017 88)",
+          "oklch(72% 0.017 88)",
+          "oklch(84% 0.013 88)",
+          "oklch(95% 0.009 88)"
+        ]
+      },
+      "card-white": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(38% 0.000 90)",
+          "oklch(49% 0.000 90)",
+          "oklch(61% 0.000 90)",
+          "oklch(72% 0.000 90)",
+          "oklch(84% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "stone-grey": {
+        "role": "neutral",
+        "displayName": "Stone Grey",
+        "canonical": "#5f5a50",
+        "tonalRamp": [
+          "oklch(15% 0.009 85)",
+          "oklch(26% 0.013 85)",
+          "oklch(38% 0.017 85)",
+          "oklch(49% 0.017 85)",
+          "oklch(61% 0.017 85)",
+          "oklch(72% 0.017 85)",
+          "oklch(84% 0.013 85)",
+          "oklch(95% 0.009 85)"
+        ]
+      },
+      "sand-line": {
+        "role": "neutral",
+        "displayName": "Sand Line",
+        "canonical": "#d9d2c3",
+        "tonalRamp": [
+          "oklch(15% 0.012 86)",
+          "oklch(26% 0.017 86)",
+          "oklch(38% 0.022 86)",
+          "oklch(49% 0.022 86)",
+          "oklch(61% 0.022 86)",
+          "oklch(72% 0.022 86)",
+          "oklch(84% 0.017 86)",
+          "oklch(95% 0.012 86)"
+        ]
+      },
+      "barber-red": {
+        "role": "status",
+        "displayName": "Barber Red",
+        "canonical": "#d93a2b",
+        "tonalRamp": [
+          "oklch(15% 0.109 30)",
+          "oklch(26% 0.154 30)",
+          "oklch(38% 0.198 30)",
+          "oklch(49% 0.198 30)",
+          "oklch(61% 0.198 30)",
+          "oklch(72% 0.198 30)",
+          "oklch(84% 0.154 30)",
+          "oklch(95% 0.109 30)"
+        ]
+      },
+      "barber-red-pale": {
+        "role": "status",
+        "displayName": "Barber Red Pale",
+        "canonical": "#fbd9d3",
+        "tonalRamp": [
+          "oklch(15% 0.021 30)",
+          "oklch(26% 0.030 30)",
+          "oklch(38% 0.039 30)",
+          "oklch(49% 0.039 30)",
+          "oklch(61% 0.039 30)",
+          "oklch(72% 0.039 30)",
+          "oklch(84% 0.030 30)",
+          "oklch(95% 0.021 30)"
+        ]
+      },
+      "done-green": {
+        "role": "status",
+        "displayName": "Done Green",
+        "canonical": "#1d7a45",
+        "tonalRamp": [
+          "oklch(15% 0.065 153)",
+          "oklch(26% 0.093 153)",
+          "oklch(38% 0.119 153)",
+          "oklch(49% 0.119 153)",
+          "oklch(61% 0.119 153)",
+          "oklch(72% 0.119 153)",
+          "oklch(84% 0.093 153)",
+          "oklch(95% 0.065 153)"
+        ]
+      },
+      "done-green-pale": {
+        "role": "status",
+        "displayName": "Done Green Pale",
+        "canonical": "#cdebd7",
+        "tonalRamp": [
+          "oklch(15% 0.023 156)",
+          "oklch(26% 0.032 156)",
+          "oklch(38% 0.041 156)",
+          "oklch(49% 0.041 156)",
+          "oklch(61% 0.041 156)",
+          "oklch(72% 0.041 156)",
+          "oklch(84% 0.032 156)",
+          "oklch(95% 0.023 156)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline with amber highlight."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Booking step panel titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card heads and summary title."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "General copy."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Form labels, buttons, chips."
+      },
+      "code": {
+        "displayName": "Display Board",
+        "purpose": "Times, dates, counts (Chakra Petch)."
+      },
+      "code-hero": {
+        "displayName": "Booking Code",
+        "purpose": "The booking code on the ticket."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hard",
+        "value": "0 5px 0 var(--ink)",
+        "purpose": "Panels, hero facts, KPIs, hovered/selected choice cards."
+      },
+      {
+        "name": "hard-sm",
+        "value": "0 3px 0 var(--ink)",
+        "purpose": "Primary buttons, selected slot, current stepper dot, toast."
+      },
+      {
+        "name": "amber-underline",
+        "value": "0 5px 0 var(--accent)",
+        "purpose": "Dark summary card (selected day uses 0 4px 0)."
+      },
+      {
+        "name": "ticket",
+        "value": "0 6px 0 var(--ink)",
+        "purpose": "Booking ticket."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 4px var(--accent)",
+        "purpose": "Focused inputs."
+      },
+      {
+        "name": "mobile-bar",
+        "value": "0 -8px 24px rgb(0 0 0 / 0.08)",
+        "purpose": "Fixed mobile bottom bar (the only blurred shadow)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "0.12s",
+        "purpose": "Button and choice-card transform/shadow transitions."
+      },
+      {
+        "name": "slot",
+        "value": "0.1s",
+        "purpose": "Slot and appointment lift."
+      },
+      {
+        "name": "panel-in",
+        "value": "0.25s ease-out",
+        "purpose": "Step panel and toast entrance (8-12px rise)."
+      },
+      {
+        "name": "pole",
+        "value": "3s linear infinite",
+        "purpose": "Barber pole stripe scroll."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "900px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1180px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Amber, ink-outlined button with a hard shadow that presses down.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">ถัดไป: เลือกช่าง</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 22px; border: 2px solid var(--ink, #111111); border-radius: 14px; background: #fff; font: 600 16px/1.3 'Prompt', 'IBM Plex Sans Thai', system-ui, sans-serif; color: #111111; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background-color 0.12s; } .ds-btn:focus-visible { outline: 3px solid #ffb22e; outline-offset: 2px; } .ds-btn-primary { background: #ffb22e; box-shadow: 0 3px 0 #111111; } .ds-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #111111; } .ds-btn-primary:active { transform: translateY(3px); box-shadow: 0 0 0 #111111; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "White outlined secondary button.",
+      "html": "<button class=\"ds-btn-ghost\">ย้อนกลับ</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; min-height: 48px; padding: 10px 22px; border: 2px solid #111111; border-radius: 14px; background: #fff; font: 600 16px/1.3 'Prompt', sans-serif; color: #111111; cursor: pointer; transition: background-color 0.12s; } .ds-btn-ghost:hover { background: #f4f1ea; } .ds-btn-ghost:focus-visible { outline: 3px solid #ffb22e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Tall outlined field with an amber focus ring.",
+      "html": "<label class=\"ds-label\"><span>เบอร์โทร</span><input class=\"ds-input\" placeholder=\"08x-xxx-xxxx\" /></label>",
+      "css": ".ds-label { display: grid; gap: 6px; max-width: 360px; } .ds-label span { font: 600 15px/1.4 'Prompt', sans-serif; color: #111111; } .ds-input { width: 100%; min-height: 56px; padding: 12px 16px; border: 2px solid #111111; border-radius: 16px; background: #fff; font: 400 17px 'IBM Plex Sans Thai', sans-serif; color: #111111; } .ds-input::placeholder { color: #9c9688; } .ds-input:focus { outline: none; box-shadow: 0 0 0 4px #ffb22e; }"
+    },
+    {
+      "name": "Time Slots",
+      "kind": "custom",
+      "refersTo": "slot",
+      "description": "Chakra Petch time tiles: open, selected, taken.",
+      "html": "<div class=\"ds-slots\"><button class=\"ds-slot\">10:00</button><button class=\"ds-slot\" aria-pressed=\"true\">10:30</button><button class=\"ds-slot\" disabled>11:00</button></div>",
+      "css": ".ds-slots { display: grid; grid-template-columns: repeat(3, 96px); gap: 10px; } .ds-slot { min-height: 56px; border: 2px solid #111111; border-radius: 14px; background: #fff; font: 600 19px/1 'Chakra Petch', 'Prompt', monospace; letter-spacing: 0.02em; color: #111111; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; } .ds-slot:hover:not(:disabled):not([aria-pressed='true']) { background: #f4f1ea; } .ds-slot:focus-visible { outline: 3px solid #ffb22e; outline-offset: 2px; } .ds-slot[aria-pressed='true'] { background: #ffb22e; box-shadow: 0 3px 0 #111111; transform: translateY(-2px); } .ds-slot:disabled { border: 2px dashed #c4bdae; background: #f4f1ea; color: #a39d90; text-decoration: line-through; font-weight: 500; cursor: not-allowed; }"
+    },
+    {
+      "name": "Status Chips",
+      "kind": "chip",
+      "refersTo": "chip-booked",
+      "description": "Dot-led outlined pills for booking status.",
+      "html": "<span class=\"ds-chip ds-booked\">จองแล้ว</span> <span class=\"ds-chip ds-done\">เสร็จแล้ว</span> <span class=\"ds-chip ds-cancelled\">ยกเลิก</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; border: 1.5px solid #111111; font: 600 13px/1.5 'Prompt', sans-serif; white-space: nowrap; } .ds-chip::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; } .ds-booked { background: #ffe2a6; color: #7a4b00; border-color: #c98a1a; } .ds-done { background: #cdebd7; color: #1d7a45; border-color: #1d7a45; } .ds-cancelled { background: #fbd9d3; color: #d93a2b; border-color: #d93a2b; }"
+    },
+    {
+      "name": "Service Choice Card",
+      "kind": "card",
+      "refersTo": "choice-card",
+      "description": "Selectable service/barber card that lifts with a hard shadow.",
+      "html": "<button class=\"ds-svc\" aria-pressed=\"true\"><span class=\"ds-svc-name\">ตัดผมชาย</span><span class=\"ds-svc-meta\">45 นาที · ฿250</span></button>",
+      "css": ".ds-svc { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 300px; min-height: 92px; padding: 16px 18px; border: 2px solid #111111; border-radius: 24px; background: #f4f1ea; text-align: left; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background-color 0.12s; } .ds-svc:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #111111; } .ds-svc:focus-visible { outline: 3px solid #ffb22e; outline-offset: 2px; } .ds-svc[aria-pressed='true'] { background: #ffb22e; box-shadow: 0 5px 0 #111111; } .ds-svc-name { font: 600 17px 'Prompt', sans-serif; color: #111111; } .ds-svc-meta { font: 600 14px 'Chakra Petch', monospace; color: #2a2a2a; }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link-active",
+      "description": "Sticky cream bar with ink-filled current link.",
+      "html": "<nav class=\"ds-top\"><a href=\"#\" aria-current=\"page\">จองคิว</a><a href=\"#\">คิวของฉัน</a><a href=\"#\" class=\"ds-admin\">หลังร้าน</a></nav>",
+      "css": ".ds-top { display: flex; align-items: center; gap: 4px; min-height: 72px; padding: 0 16px; background: rgb(244 241 234 / 0.92); backdrop-filter: blur(10px); border-bottom: 2px solid #111111; } .ds-top a { padding: 8px 14px; border-radius: 12px; border: 2px solid transparent; font: 500 16px/1.4 'Prompt', sans-serif; color: #111111; text-decoration: none; } .ds-top a:hover { background: #e9e4d8; } .ds-top a:focus-visible { outline: 3px solid #ffb22e; outline-offset: 2px; } .ds-top a[aria-current='page'] { background: #111111; color: #f4f1ea; } .ds-top .ds-admin { margin-left: 8px; border-color: #111111; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Ticket Counter",
+    "overview": "A bold, high-contrast barbershop counter: near-black ink, warm off-white paper, and one barber-pole amber. Everything is a chunky physical object: 2px black outlines, big rounded corners, and hard offset shadows with no blur, so cards and buttons look like printed tickets and cardboard tokens you can press. The booking ends in a literal paper ticket with a perforation, a barcode and a status stamp.\n\nThe customer flow is a five-step stepper with large touch targets (48-56px) and a sticky dark summary card; the admin is a dark-sidebar dashboard with a timeline board per barber. Numbers, times and booking codes are set in Chakra Petch, a squared techno face, so they read like a queue display.\n\nMotion is small and tactile: hover lifts 1-2px, press sinks 3px and the hard shadow collapses; the barber pole logo animates its stripes.",
+    "keyCharacteristics": [
+      "Clipper black (#111111) outlines and text, towel cream (#f4f1ea) page, pole amber (#ffb22e) for selection and the main action.",
+      "Hard offset shadows (`0 5px 0` ink) instead of soft blur.",
+      "2px borders on every interactive card, input and button.",
+      "Chakra Petch for every time, code and count.",
+      "Ticket, stamp and barber-pole motifs."
+    ],
+    "rules": [
+      {
+        "name": "The One Pole Rule",
+        "body": "Amber marks exactly what is selected or what to press next. If two things on a screen are amber, one of them is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Outline Rule",
+        "body": "Interactive surfaces carry a 2px Clipper Black border; disabled ones lose it to a lighter or dashed line.",
+        "section": "colors"
+      },
+      {
+        "name": "The Display Board Rule",
+        "body": "Any time, date number, booking code or count is Chakra Petch. Thai words never are.",
+        "section": "typography"
+      },
+      {
+        "name": "The Press-Down Rule",
+        "body": "Hover rises 1-2px with the offset; active sinks 3px and the shadow goes to `0 0 0`. Never use a blurred drop shadow on a card.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do outline every interactive card, input and button in 2px Clipper Black (#111111).",
+      "Do use hard offset shadows (`0 5px 0` / `0 3px 0` ink) and the press-down interaction.",
+      "Do reserve Pole Amber (#ffb22e) for the selected item and the next action.",
+      "Do set times, dates, codes and counts in Chakra Petch with tabular numerals.",
+      "Do keep touch targets at 48px or more (inputs and slots 56px)."
+    ],
+    "donts": [
+      "Don't use blurred drop shadows on content cards.",
+      "Don't add a second accent hue; red and green are status only.",
+      "Don't set Thai words in Chakra Petch.",
+      "Don't use `window.alert` or `confirm`; confirm inline."
+    ]
+  }
+}
