@@ -24,6 +24,19 @@ export default function MyBooking() {
   // true while the booking saved on this device is being fetched on arrival
   const [auto, setAuto] = useState(() => !!(code && phone))
   const started = useRef(false)
+  const ticketBox = useRef<HTMLDivElement>(null)
+  // polite announcement for lookup / cancel results (the ticket renders in another column)
+  const [said, setSaid] = useState('')
+
+  // a typed lookup or a cancel: bring the ticket into view (it sits below the form on phones) and focus it
+  const reveal = () =>
+    requestAnimationFrame(() => {
+      const el = ticketBox.current
+      if (!el) return
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      el.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' })
+      el.focus({ preventScroll: true })
+    })
 
   async function find(c: string, p: string, quiet = false) {
     setBusy(true)
@@ -31,6 +44,8 @@ export default function MyBooking() {
     setConfirming(false)
     try {
       setTicket(toTicket(await send<RawBooking>('/bookings/lookup', 'POST', { code: c, phone: p })))
+      setSaid(`พบคิว ${c}`)
+      if (!quiet) reveal()
     } catch (err) {
       setTicket(null)
       // a stale saved booking (demo reset, another device) just leaves the form filled in, no red alert
@@ -64,6 +79,8 @@ export default function MyBooking() {
     setError('')
     try {
       setTicket(toTicket(await send<RawBooking>('/bookings/cancel', 'POST', { code, phone })))
+      setSaid(`ยกเลิกคิว ${code} แล้ว`)
+      reveal()
     } catch (err) {
       setError((err as ApiError).message)
     } finally {
@@ -119,7 +136,10 @@ export default function MyBooking() {
         </p>
       </div>
 
-      <div className="my-ticket">
+      <p className="sr-only" role="status">
+        {said}
+      </p>
+      <div className={`my-ticket ${ticket ? 'has-ticket' : ''}`} ref={ticketBox} tabIndex={-1} aria-label={ticket ? `บัตรคิว ${ticket.code}` : undefined}>
         {ticket ? (
           <>
             <Ticket t={ticket} />

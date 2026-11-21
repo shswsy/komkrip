@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { SHOP } from '../shared/shop'
 import Admin from './pages/Admin'
 import Book from './pages/Book'
@@ -16,6 +16,19 @@ export default function App() {
         ? `เช็กคิวของฉัน · ${SHOP.name}`
         : `${SHOP.name} — จองคิวตัดผมออนไลน์`
   }, [path, admin])
+
+  // client-side route change: move focus to the new page's heading so screen readers hear the new page
+  const first = useRef(true)
+  useEffect(() => {
+    if (first.current) {
+      first.current = false
+      return
+    }
+    const h = document.querySelector<HTMLElement>('main h1')
+    if (!h) return
+    h.tabIndex = -1
+    h.focus({ preventScroll: true })
+  }, [path])
 
   return (
     <div className={`shell ${admin ? 'is-admin' : ''}`}>
