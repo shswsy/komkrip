@@ -271,7 +271,8 @@ export default function Book() {
 
   return (
     <>
-      <section className="hero">
+      {/* once the customer is in the flow, phones/tablets shrink the hero to one line so the task starts near the top */}
+      <section className={`hero ${step > 0 ? 'is-compact' : ''}`}>
         <div className="wrap hero-in">
           <div className="hero-copy">
             <span className="tag">ร้านตัดผมชาย · {SHOP.area}</span>
